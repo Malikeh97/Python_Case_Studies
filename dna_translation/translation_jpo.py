@@ -1,8 +1,9 @@
-inputfile = "dna.txt"
-f = open(inputfile, "r")
-seq = f.read()
-seq = seq.replace("\n","")
-seq = seq.replace("\r","")
+def read_file(inputfile):
+    with open(inputfile, "r") as f:
+        seq = f.read()
+    seq = seq.replace("\n","")
+    seq = seq.replace("\r","")
+    return seq
 
 def translate(seq):
     table = {
@@ -33,3 +34,6 @@ def translate(seq):
     else:
         print("sequence not valid")
     return protein
+
+prt = read_file("protein.txt")
+dna = read_file("dna.txt")
