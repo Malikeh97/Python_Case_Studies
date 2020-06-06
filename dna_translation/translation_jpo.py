@@ -37,3 +37,6 @@ def translate(seq):
 
 prt = read_file("protein.txt")
 dna = read_file("dna.txt")
+translated_prt = translate(dna[20:935])
+print(prt == translated_prt)
+print(translate(dna[20:938])[:-1] == translate(dna[20:935]))
