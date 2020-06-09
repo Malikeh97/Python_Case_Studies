@@ -1,6 +1,8 @@
 from collections import Counter
-text = "This is my test text. We're keeping this text short to keep things manageable"
+import os
 
+text = "This is my test text. We're keeping this text short to keep things manageable"
+book_dir = "./Books"
 def count_word(text):
     word_counts = {}
     text = text.lower()
@@ -40,8 +42,29 @@ def word_stats(word_counts):
     counts = word_counts.values()
     return (num_unique, counts)
 
-text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
-word_counts = count_word_fast(text)
-(num_unique, counts) = word_stats(word_counts)
-print(num_unique)
-print(sum(counts))
+for language in os.listdir(book_dir):
+    if language == ".DS_Store":
+        continue
+    for author in os.listdir(book_dir + "/" + language):
+        if author == ".DS_Store":
+            continue
+        for title in os.listdir(book_dir + "/" + language + "/" + author):
+            if title == ".DS_Store":
+                continue
+            inputfile = book_dir + "/" + language + "/" + author + "/" + title
+            print(inputfile)
+            text_book = read_book(inputfile)
+            word_counts = count_word_fast(text_book)
+            (num_unique, counts) = word_stats(word_counts)
+
+# text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
+# word_counts = count_word_fast(text)
+# (num_unique, counts) = word_stats(word_counts)
+# print(num_unique)
+# print(sum(counts))
+#
+# text = read_book("./Books/Books_GerPort/German/shakespeare/Romeo und Julia.txt")
+# word_counts = count_word_fast(text)
+# (num_unique, counts) = word_stats(word_counts)
+# print(num_unique)
+# print(sum(counts))
