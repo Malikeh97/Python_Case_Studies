@@ -1,6 +1,7 @@
 from collections import Counter
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 
 text = "This is my test text. We're keeping this text short to keep things manageable"
 book_dir = "./Books"
@@ -61,19 +62,18 @@ for language in os.listdir(book_dir):
             (num_unique, counts) = word_stats(word_counts)
             stats.loc[title_num] = language, author.capitalize(), title.replace(".txt", ""), sum(counts), num_unique
             title_num += 1
-print(stats.head())            
-# text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
-# word_counts = count_word_fast(text)
-# (num_unique, counts) = word_stats(word_counts)
-# print(num_unique)
-# print(sum(counts))
-#
-# text = read_book("./Books/Books_GerPort/German/shakespeare/Romeo und Julia.txt")
-# word_counts = count_word_fast(text)
-# (num_unique, counts) = word_stats(word_counts)
-# print(num_unique)
-# print(sum(counts))
-# table = pd.DataFrame(columns = ("name", "age"))
-# table.loc[1] = "James" , 22
-# table.loc[2] = "Jess" , 32
-# print(table.columns)
+
+plt.figure(figsize = (10, 10))
+subset = stats[stats.language == "English"]
+plt.loglog(subset.length, subset.unique, "o", label = "English", color = "crimson")
+subset = stats[stats.language == "French"]
+plt.loglog(subset.length, subset.unique, "o", label = "French", color = "forestgreen")
+subset = stats[stats.language == "German"]
+plt.loglog(subset.length, subset.unique, "o", label = "German", color = "orange")
+subset = stats[stats.language == "Portuguese"]
+plt.loglog(subset.length, subset.unique, "o", label = "Portuguese", color = "blueviolet")
+plt.legend()
+plt.xlabel("Book length")
+plt.ylabel("Number of unique words")
+plt.savefig("lang_plot.pdf")
+plt.show()
