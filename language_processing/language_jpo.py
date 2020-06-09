@@ -25,5 +25,18 @@ def count_word_fast(text):
     word_counts = Counter(text.split(" "))
     return word_counts
 
-print(count_word_fast(text))
-print(count_word(text) == count_word_fast(text))
+# print(count_word_fast(text))
+# print(count_word(text) == count_word_fast(text))
+# print(count_word(text) is count_word_fast(text))
+
+def read_book(title_path):
+    with open(title_path, "r", encoding="utf8") as current_file:
+        text = current_file.read()
+        text = text.replace("\n", "").replace("\r", "")
+    return text
+
+text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
+print(len(text))
+ind = text.find("What's in a name?")
+sample_text = text[ind : ind + 1000]
+print(sample_text)
