@@ -1,8 +1,12 @@
 from collections import Counter
 import os
+import pandas as pd
 
 text = "This is my test text. We're keeping this text short to keep things manageable"
 book_dir = "./Books"
+stats = pd.DataFrame(columns = ("language", "author", "title", "length", "unique"))
+title_num = 1
+
 def count_word(text):
     word_counts = {}
     text = text.lower()
@@ -52,11 +56,12 @@ for language in os.listdir(book_dir):
             if title == ".DS_Store":
                 continue
             inputfile = book_dir + "/" + language + "/" + author + "/" + title
-            print(inputfile)
             text_book = read_book(inputfile)
             word_counts = count_word_fast(text_book)
             (num_unique, counts) = word_stats(word_counts)
-
+            stats.loc[title_num] = language, author.capitalize(), title.replace(".txt", ""), sum(counts), num_unique
+            title_num += 1
+print(stats.head())            
 # text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
 # word_counts = count_word_fast(text)
 # (num_unique, counts) = word_stats(word_counts)
@@ -68,3 +73,7 @@ for language in os.listdir(book_dir):
 # (num_unique, counts) = word_stats(word_counts)
 # print(num_unique)
 # print(sum(counts))
+# table = pd.DataFrame(columns = ("name", "age"))
+# table.loc[1] = "James" , 22
+# table.loc[2] = "Jess" , 32
+# print(table.columns)
