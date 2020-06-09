@@ -35,8 +35,13 @@ def read_book(title_path):
         text = text.replace("\n", "").replace("\r", "")
     return text
 
+def word_stats(word_counts):
+    num_unique = len(word_counts)
+    counts = word_counts.values()
+    return (num_unique, counts)
+
 text = read_book("./Books/Books_EngFr/English/shakespeare/Romeo and Juliet.txt")
-print(len(text))
-ind = text.find("What's in a name?")
-sample_text = text[ind : ind + 1000]
-print(sample_text)
+word_counts = count_word_fast(text)
+(num_unique, counts) = word_stats(word_counts)
+print(num_unique)
+print(sum(counts))
