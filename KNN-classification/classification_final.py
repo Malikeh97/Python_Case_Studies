@@ -5,6 +5,8 @@ import scipy.stats as ss
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn import datasets
+from sklearn.neighbors import KNeighborsClassifier
+
 
 
 def generate_synth_data(n = 100):
@@ -84,10 +86,7 @@ def plot_prediction_grid (xx, yy, prediction_grid, filename):
     plt.savefig(filename)
 
 # (predictors, outcomes) = generate_synth_data()
-# k=5; filename = "knn_synth_5.pdf"; limits = (-3, 4, -3, 4); h = 0.1
-# (xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
-# plot_prediction_grid(xx, yy, prediction_grid, filename)
-#
+
 # k=50; filename = "knn_synth_50.pdf"; limits = (-3, 4, -3, 4); h = 0.1
 # (xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
 # plot_prediction_grid(xx, yy, prediction_grid, filename)
@@ -98,3 +97,7 @@ plt.plot(predictors[outcomes == 0][:,0], predictors[outcomes == 0][:,1], "ro")
 plt.plot(predictors[outcomes == 1][:,0], predictors[outcomes == 1][:,1], "go")
 plt.plot(predictors[outcomes == 2][:,0], predictors[outcomes == 2][:,1], "bo")
 plt.savefig("iris.pdf")
+
+k=5; filename = "iris_grid.pdf"; limits = (4, 8, 1.5, 4.5); h = 0.1
+(xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
+plot_prediction_grid(xx, yy, prediction_grid, filename)
