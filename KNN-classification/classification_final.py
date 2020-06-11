@@ -8,7 +8,6 @@ from sklearn import datasets
 from sklearn.neighbors import KNeighborsClassifier
 
 
-
 def generate_synth_data(n = 100):
     """
     Create two sets of points from bivariate normal distribution
@@ -18,8 +17,7 @@ def generate_synth_data(n = 100):
     return (points, outcomes)
 
 def distance(p1, p2):
-    """Finds the distance between points p1 and p2"""
-    return  np.sqrt(np.sum(np.power(p1 - p2, 2)))
+    return np.sqrt(np.sum(np.power(p2 - p1, 2)))
 
 def majority_vote(votes):
     """
@@ -38,10 +36,7 @@ def majority_vote(votes):
             winners.append(vote)
     return random.choice(winners)
 
-def majority_vote_short(votes):
-    """
-    Return the most common elements in votes
-    """
+def majority_vote_fast(votes):
     mode, count = ss.mstats.mode(votes)
     return mode
 
@@ -50,11 +45,11 @@ def find_nearest_neighbors(p, points, k=5):
     for i in range(len(distances)):
         distances[i] = distance(p, points[i])
     ind = np.argsort(distances)
-    return(ind)
+    return ind[:k]
 
-def knn_predict(p , points, outcomes, k):
+def knn_predict(p, points, outcomes, k=5):
     ind = find_nearest_neighbors(p, points, k)
-    return majority_vote(outcomes[ind])
+    return majority_vote_fast(outcomes[ind])[0]
 
 def make_prediction_grid(predictors, outcomes, limits, h, k):
     """
@@ -101,3 +96,11 @@ plt.savefig("iris.pdf")
 k=5; filename = "iris_grid.pdf"; limits = (4, 8, 1.5, 4.5); h = 0.1
 (xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
 plot_prediction_grid(xx, yy, prediction_grid, filename)
+
+knn = KNeighborsClassifier(n_neighbors = 5)
+knn.fit(predictors, outcomes)
+sk_predictions = knn.predict(predictors)
+my_predictions = np.array([knn_predict(p , predictors, outcomes, 5) for p in predictors ])
+print(100*np.mean(sk_predictions == my_predictions))
+print(100*np.mean(sk_predictions == outcomes)) #accuracy
+print(100*np.mean(my_predictions == outcomes))
