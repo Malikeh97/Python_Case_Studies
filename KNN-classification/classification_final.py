@@ -4,6 +4,8 @@ import random
 import scipy.stats as ss
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from sklearn import datasets
+
 
 def generate_synth_data(n = 100):
     """
@@ -81,11 +83,18 @@ def plot_prediction_grid (xx, yy, prediction_grid, filename):
     plt.ylim (np.min(yy), np.max(yy))
     plt.savefig(filename)
 
-(predictors, outcomes) = generate_synth_data()
-k=5; filename = "knn_synth_5.pdf"; limits = (-3, 4, -3, 4); h = 0.1
-(xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
-plot_prediction_grid(xx, yy, prediction_grid, filename)
-
-k=50; filename = "knn_synth_50.pdf"; limits = (-3, 4, -3, 4); h = 0.1
-(xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
-plot_prediction_grid(xx, yy, prediction_grid, filename)
+# (predictors, outcomes) = generate_synth_data()
+# k=5; filename = "knn_synth_5.pdf"; limits = (-3, 4, -3, 4); h = 0.1
+# (xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
+# plot_prediction_grid(xx, yy, prediction_grid, filename)
+#
+# k=50; filename = "knn_synth_50.pdf"; limits = (-3, 4, -3, 4); h = 0.1
+# (xx, yy, prediction_grid) = make_prediction_grid(predictors, outcomes, limits, h, k)
+# plot_prediction_grid(xx, yy, prediction_grid, filename)
+iris = datasets.load_iris()
+predictors = iris.data[:, 0:2] #extract two first columns
+outcomes = iris.target
+plt.plot(predictors[outcomes == 0][:,0], predictors[outcomes == 0][:,1], "ro")
+plt.plot(predictors[outcomes == 1][:,0], predictors[outcomes == 1][:,1], "go")
+plt.plot(predictors[outcomes == 2][:,0], predictors[outcomes == 2][:,1], "bo")
+plt.savefig("iris.pdf")
