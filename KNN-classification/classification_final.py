@@ -4,8 +4,13 @@ import random
 import scipy.stats as ss
 import matplotlib.pyplot as plt
 
-p1 = np.array([1,1])
-p2 = np.array([4,4])
+def generate_synth_data(n = 50):
+    """
+    Create two sets of points from bivariate normal distribution
+    """
+    points = np.concatenate((ss.norm(0,1).rvs((n,2)), ss.norm(1,1).rvs((n,2))), axis = 0)
+    outcomes = np.concatenate((np.repeat(0, n), np.repeat(1, n)))
+    return (points, outcomes)
 
 def distance(p1, p2):
     """Finds the distance between points p1 and p2"""
@@ -47,14 +52,16 @@ def knn_predict(p , points, outcomes, k):
     return majority_vote(outcomes[ind])
 
 
-
-points = np.array([[1,1], [1,2], [1,3], [2,1] ,[2,2] ,[2,3], [3,1], [3,2], [3,3]])
 p = np.array([2.5, 2])
-outcomes = np.array([0,0,0,0,1,1,1,1,1])
-print(knn_predict(p , points, outcomes, 2))
+n = 20
+(points, outcomes) = generate_synth_data(n)
+print(knn_predict(p , points, outcomes, 5))
 
 
-plt.plot(points[:,0], points[:,1], "ro")
-plt.plot(p[0], p[1], "bo")
-plt.axis([0.5,3.5, 0.5, 3.5])
+plt.figure()
+plt.plot(points[:n,0], points[:n,1], "ro")
+plt.plot(points[n:,0], points[n:,1], "bo")
+plt.plot(p[0], p[1], "yo")
+plt.axis([-3.5,3.5, -3.5, 3.5])
+plt.savefig('bivardata.pdf')
 plt.show()
