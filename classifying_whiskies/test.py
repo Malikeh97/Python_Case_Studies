@@ -24,3 +24,20 @@ model.fit(corr_whiskies)
 print(np.sum(model.rows_, axis = 1)) # number of whiskies in each cluster
 print(np.sum(model.rows_, axis = 0)) # number of clusters for each observation
 print(model.row_labels_)
+
+whisky['Group'] = pd.Series(model.row_labels_, index = whisky.index) #append group labels
+whisky = whisky.iloc[np.argsort(model.row_labels_)] #reorder the rows in increasing order by group labels
+whisky = whisky.reset_index(drop = True) #reset the index of our DataFrame
+correlations =  pd.DataFrame.corr(whisky.iloc[:, 2:14].transpose()) #after reshuffle
+correlations = np.array(correlations)
+
+# plt.figure(figsize = (14, 7))
+# plt.subplot(121)
+# plt.pcolor(corr_whiskies)
+# plt.title("Original")
+# plt.axis("tight")
+# plt.subplot(122)
+# plt.pcolor(correlations)
+# plt.title("Reaarenged")
+# plt.axis("tight")
+# plt.savefig("correlations.pdf")
