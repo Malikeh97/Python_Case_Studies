@@ -5,6 +5,7 @@ import datetime
 
 birddata = pd.read_csv("bird_tracking.csv")
 ix = birddata.bird_name == 'Eric'
+data = birddata[birddata.bird_name == 'Eric']
 x , y = birddata.longitude[ix], birddata.latitude[ix]
 bird_names = pd.unique(birddata.bird_name)
 speed = birddata.speed_2d[ix]
@@ -16,10 +17,28 @@ for k in range(len(birddata)):
 birddata["timestamp"] = pd.Series(timestamps, index = birddata.index)
 times = birddata.timestamp[birddata.bird_name == 'Eric']
 elapsed_time = [time - times[0] for time in times]
-plt.plot(np.array(elapsed_time)/ datetime.timedelta(days = 1))
-plt.xlabel("Observation")
-plt.ylabel("Elapsed time (days)")
-plt.savefig("timeplot.pdf")
+# plt.plot(np.array(elapsed_time)/ datetime.timedelta(days = 1))
+# plt.xlabel("Observation")
+# plt.ylabel("Elapsed time (days)")
+# plt.savefig("timeplot.pdf")
+elapsed_days = np.array(elapsed_time)/ datetime.timedelta(days = 1)
+next_day = 1
+inds = []
+daily_mean_speed = []
+for (i, t) in enumerate(elapsed_days):
+    if t < next_day:
+        inds.append(i)
+    else:
+        daily_mean_speed.append(np.mean(data.speed_2d[inds]))
+        next_day += 1
+        inds = []
+
+plt.figure(figsize= (8, 6))
+plt.plot(daily_mean_speed)
+plt.xlabel("Day")
+plt.ylabel("Mean speed (m/s)")
+plt.savefig("dms.pdf")
+
 
 # ind = np.isnan(speed)
 # plt.figure(figsize = (8,4))
