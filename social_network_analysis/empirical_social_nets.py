@@ -23,3 +23,10 @@ basic_net_stats(G2)
 plot_degree_distribution(G1)
 plot_degree_distribution(G2)
 plt.savefig("village_hist.pdf")
+
+gen1 = (G1.subgraph(c).copy() for c in nx.connected_components(G1))
+gen2 = (G2.subgraph(c).copy() for c in nx.connected_components(G2))
+G1_LCC = max(gen1, key=len) #largest connected component
+G2_LCC = max(gen2, key=len)
+print(G1_LCC.number_of_nodes()/G1.number_of_nodes())
+print(G2_LCC.number_of_nodes()/G2.number_of_nodes())
