@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 
 birddata = pd.read_csv("bird_tracking.csv")
 ix = birddata.bird_name == 'Eric'
@@ -32,13 +34,11 @@ for (i, t) in enumerate(elapsed_days):
         daily_mean_speed.append(np.mean(data.speed_2d[inds]))
         next_day += 1
         inds = []
-
-plt.figure(figsize= (8, 6))
-plt.plot(daily_mean_speed)
-plt.xlabel("Day")
-plt.ylabel("Mean speed (m/s)")
-plt.savefig("dms.pdf")
-
+# plt.figure(figsize= (8, 6))
+# plt.plot(daily_mean_speed)
+# plt.xlabel("Day")
+# plt.ylabel("Mean speed (m/s)")
+# plt.savefig("dms.pdf")
 
 # ind = np.isnan(speed)
 # plt.figure(figsize = (8,4))
@@ -46,8 +46,24 @@ plt.savefig("dms.pdf")
 # plt.xlabel("2D speed (m/s)")
 # plt.ylabel("Frequency")
 # plt.savefig("speed_hist.pdf")
-#
+
 # #no need to deal with nans explicitly using pandas
 # birddata.speed_2d.plot(kind = "hist", range = [0, 30])
 # plt.xlabel("2D speed (m/s)")
 # plt.savefig("pd_hist")
+proj = ccrs.Mercator()
+plt.figure(figsize = (10, 10))
+ax = plt.axes(projection = proj)
+ax.set_extent((-25.0, 20.0, 52.0, 10.0))
+ax.add_feature(cfeature.LAND)
+ax.add_feature(cfeature.OCEAN)
+ax.add_feature(cfeature.COASTLINE)
+ax.add_feature(cfeature.BORDERS, linestyle=':')
+
+
+for name in bird_names:
+    ix = birddata.bird_name == name
+    x , y = birddata.longitude[ix], birddata.latitude[ix]
+    ax.plot(x, y, '.', transform=ccrs.Geodetic(), label=name)
+plt.legend(loc = "upper left")
+plt.savefig("map.pdf")
