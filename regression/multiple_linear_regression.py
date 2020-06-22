@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import statsmodels.api as sm
 from sklearn  import linear_model
+from sklearn.model_selection import train_test_split
 
 n = 500
 beta_0 = 5
@@ -22,9 +23,9 @@ ax.set_xlabel("$x_1$")
 ax.set_ylabel("$x_2$")
 ax.set_zlabel("$y$")
 # plt.show()
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.5, random_state=1)
 lm = linear_model.LinearRegression(fit_intercept = True)
-lm.fit(X, y)
-print(lm.coef_, lm.intercept_)
-X_0 = np.array([2, 4])
-print(lm.predict(X_0.reshape(1, -1)))#because we have only one sample
-print(lm.score(X, y))
+lm.fit(X_train, y_train)
+print(lm.score(X_test, y_test))
