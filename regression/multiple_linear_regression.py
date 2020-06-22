@@ -3,6 +3,7 @@ import scipy.stats as ss
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import statsmodels.api as sm
+from sklearn  import linear_model
 
 n = 500
 beta_0 = 5
@@ -20,4 +21,10 @@ ax.scatter(X[:, 0], X[:, 1], y, c=y)
 ax.set_xlabel("$x_1$")
 ax.set_ylabel("$x_2$")
 ax.set_zlabel("$y$")
-plt.show()
+# plt.show()
+lm = linear_model.LinearRegression(fit_intercept = True)
+lm.fit(X, y)
+print(lm.coef_, lm.intercept_)
+X_0 = np.array([2, 4])
+print(lm.predict(X_0.reshape(1, -1)))#because we have only one sample
+print(lm.score(X, y))
